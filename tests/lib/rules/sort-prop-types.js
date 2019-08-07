@@ -878,6 +878,158 @@ ruleTester.run('sort-prop-types', rule, {
     ].join('\n')
   }, {
     code: [
+      'var First = createReactClass({',
+      '  propTypes: {',
+      '    z: PropTypes.string,',
+      '    a: PropTypes.any,',
+      '    onFoo: PropTypes.func,',
+      '    onBar: PropTypes.func',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      callbacksLast: true,
+      noSortNonCallbackAlphabetically: true
+    }],
+    errors: [{
+      message: ERROR_MESSAGE,
+      line: 6,
+      column: 5,
+      type: 'Property'
+    }],
+    output: [
+      'var First = createReactClass({',
+      '  propTypes: {',
+      '    z: PropTypes.string,',
+      '    a: PropTypes.any,',
+      '    onBar: PropTypes.func,',
+      '    onFoo: PropTypes.func',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n')
+  }, {
+    code: [
+      'class Component extends React.Component {',
+      '  static propTypes = {',
+      '    z: PropTypes.string,',
+      '    a: PropTypes.any,',
+      '    onFoo: PropTypes.func,',
+      '    onBar: PropTypes.func',
+      '  };',
+      '  render() {',
+      '    return <div />;',
+      '  }',
+      '}'
+    ].join('\n'),
+    options: [{
+      callbacksLast: true,
+      noSortNonCallbackAlphabetically: true
+    }],
+    parser: parsers.BABEL_ESLINT,
+    errors: [{
+      message: ERROR_MESSAGE,
+      line: 6,
+      column: 5,
+      type: 'Property'
+    }],
+    output: [
+      'class Component extends React.Component {',
+      '  static propTypes = {',
+      '    z: PropTypes.string,',
+      '    a: PropTypes.any,',
+      '    onBar: PropTypes.func,',
+      '    onFoo: PropTypes.func',
+      '  };',
+      '  render() {',
+      '    return <div />;',
+      '  }',
+      '}'
+    ].join('\n')
+  }, {
+    code: [
+      'class First extends React.Component {',
+      '  render() {',
+      '    return <div />;',
+      '  }',
+      '}',
+      'First.propTypes = {',
+      '    z: PropTypes.string,',
+      '    a: PropTypes.any,',
+      '    onFoo: PropTypes.func,',
+      '    onBar: PropTypes.func',
+      '};'
+    ].join('\n'),
+    options: [{
+      callbacksLast: true,
+      noSortNonCallbackAlphabetically: true
+    }],
+    errors: [{
+      message: ERROR_MESSAGE,
+      line: 10,
+      column: 5,
+      type: 'Property'
+    }],
+    output: [
+      'class First extends React.Component {',
+      '  render() {',
+      '    return <div />;',
+      '  }',
+      '}',
+      'First.propTypes = {',
+      '    z: PropTypes.string,',
+      '    a: PropTypes.any,',
+      '    onBar: PropTypes.func,',
+      '    onFoo: PropTypes.func',
+      '};'
+    ].join('\n')
+  }, {
+    code: [
+      'class First extends React.Component {',
+      '  render() {',
+      '    return <div />;',
+      '  }',
+      '}',
+      'First.propTypes = forbidExtraProps({',
+      '    z: PropTypes.string,',
+      '    a: PropTypes.any,',
+      '    onFoo: PropTypes.func,',
+      '    onBar: PropTypes.func',
+      '});'
+    ].join('\n'),
+    options: [{
+      callbacksLast: true,
+      noSortNonCallbackAlphabetically: true
+    }],
+    settings: {
+      propWrapperFunctions: ['forbidExtraProps']
+    },
+    errors: [{
+      message: ERROR_MESSAGE,
+      line: 10,
+      column: 5,
+      type: 'Property'
+    }],
+    output: [
+      'class First extends React.Component {',
+      '  render() {',
+      '    return <div />;',
+      '  }',
+      '}',
+      'First.propTypes = forbidExtraProps({',
+      '    z: PropTypes.string,',
+      '    a: PropTypes.any,',
+      '    onBar: PropTypes.func,',
+      '    onFoo: PropTypes.func',
+      '});'
+    ].join('\n')
+  }, {
+    code: [
       'const First = (props) => <div />;',
       'const propTypes = {',
       '    z: PropTypes.string,',

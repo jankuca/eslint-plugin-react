@@ -59,6 +59,15 @@ const ignoreCaseAndCallbackLastArgs = [{
   callbacksLast: true,
   ignoreCase: true
 }];
+const callbacksLastSortedArgs = [{
+  callbacksLast: true,
+  noSortNonCallbackAlphabetically: true
+}];
+const ignoreCaseAndCallbacksLastSortedArgs = [{
+  callbacksLast: true,
+  noSortNonCallbackAlphabetically: true,
+  ignoreCase: true
+}];
 const shorthandFirstArgs = [{
   shorthandFirst: true
 }];
@@ -117,6 +126,9 @@ ruleTester.run('jsx-sort-props', rule, {
     // Sorting callbacks below all other props
     {code: '<App a z onBar onFoo />;', options: callbacksLastArgs},
     {code: '<App z onBar onFoo />;', options: ignoreCaseAndCallbackLastArgs},
+    // Sorting callbacks alphabetically
+    {code: '<App z a onBar onFoo />;', options: callbacksLastSortedArgs},
+    {code: '<App z onBar onFoo />;', options: ignoreCaseAndCallbacksLastSortedArgs},
     // Sorting shorthand props before others
     {code: '<App a b="b" />;', options: shorthandFirstArgs},
     {code: '<App z a="a" />;', options: shorthandFirstArgs},
@@ -356,6 +368,18 @@ ruleTester.run('jsx-sort-props', rule, {
       errors: [expectedCallbackError],
       options: callbacksLastArgs,
       output: '<App a z onBar onFoo />;'
+    },
+    {
+      code: '<App z a onFoo onBar />;',
+      errors: [expectedError],
+      options: callbacksLastSortedArgs,
+      output: '<App z a onBar onFoo />;'
+    },
+    {
+      code: '<App z onBar onFoo a />;',
+      errors: [expectedCallbackError],
+      options: callbacksLastSortedArgs,
+      output: '<App z a onBar onFoo />;'
     },
     {
       code: '<App a="a" b />;',
