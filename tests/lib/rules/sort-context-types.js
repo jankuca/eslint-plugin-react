@@ -35,24 +35,7 @@ ruleTester.run('sort-prop-types', rule, {
   valid: [{
     code: [
       'var First = createReactClass({',
-      '  render: function() {',
-      '    return <div />;',
-      '  }',
-      '});'
-    ].join('\n')
-  }, {
-    code: [
-      'var First = createReactClass({',
-      '  propTypes: externalPropTypes,',
-      '  render: function() {',
-      '    return <div />;',
-      '  }',
-      '});'
-    ].join('\n')
-  }, {
-    code: [
-      'var First = createReactClass({',
-      '  propTypes: {',
+      '  contextTypes: {',
       '    A: PropTypes.any,',
       '    Z: PropTypes.string,',
       '    a: PropTypes.any,',
@@ -62,11 +45,14 @@ ruleTester.run('sort-prop-types', rule, {
       '    return <div />;',
       '  }',
       '});'
-    ].join('\n')
+    ].join('\n'),
+    options: [{
+      sortContextTypes: true
+    }]
   }, {
     code: [
       'var First = createReactClass({',
-      '  propTypes: {',
+      '  contextTypes: {',
       '    a: PropTypes.any,',
       '    A: PropTypes.any,',
       '    z: PropTypes.string,',
@@ -78,12 +64,13 @@ ruleTester.run('sort-prop-types', rule, {
       '});'
     ].join('\n'),
     options: [{
-      ignoreCase: true
+      ignoreCase: true,
+      sortContextTypes: true
     }]
   }, {
     code: [
       'var First = createReactClass({',
-      '  propTypes: {',
+      '  contextTypes: {',
       '    a: PropTypes.any,',
       '    z: PropTypes.string',
       '  },',
@@ -92,7 +79,7 @@ ruleTester.run('sort-prop-types', rule, {
       '  }',
       '});',
       'var Second = createReactClass({',
-      '  propTypes: {',
+      '  contextTypes: {',
       '    AA: PropTypes.any,',
       '    ZZ: PropTypes.string',
       '  },',
@@ -100,7 +87,10 @@ ruleTester.run('sort-prop-types', rule, {
       '    return <div />;',
       '  }',
       '});'
-    ].join('\n')
+    ].join('\n'),
+    options: [{
+      sortContextTypes: true
+    }]
   }, {
     code: [
       'class First extends React.Component {',
@@ -108,12 +98,15 @@ ruleTester.run('sort-prop-types', rule, {
       '    return <div />;',
       '  }',
       '}',
-      'First.propTypes = {',
+      'First.contextTypes = {',
       '  a: PropTypes.string,',
       '  z: PropTypes.string',
       '};',
-      'First.propTypes.justforcheck = PropTypes.string;'
-    ].join('\n')
+      'First.contextTypes.justforcheck = PropTypes.string;'
+    ].join('\n'),
+    options: [{
+      sortContextTypes: true
+    }]
   }, {
     code: [
       'class First extends React.Component {',
@@ -121,7 +114,7 @@ ruleTester.run('sort-prop-types', rule, {
       '    return <div />;',
       '  }',
       '}',
-      'First.propTypes = {',
+      'First.contextTypes = {',
       '  a: PropTypes.any,',
       '  A: PropTypes.any,',
       '  z: PropTypes.string,',
@@ -129,7 +122,8 @@ ruleTester.run('sort-prop-types', rule, {
       '};'
     ].join('\n'),
     options: [{
-      ignoreCase: true
+      ignoreCase: true,
+      sortContextTypes: true
     }]
   }, {
     code: [
@@ -144,6 +138,9 @@ ruleTester.run('sort-prop-types', rule, {
       '  }',
       '}'
     ].join('\n'),
+    options: [{
+      sortContextTypes: true
+    }],
     parser: parsers.BABEL_ESLINT
   }, {
     code: [
@@ -152,18 +149,19 @@ ruleTester.run('sort-prop-types', rule, {
       '    return <div>Hello</div>;',
       '  }',
       '}',
-      'Hello.propTypes = {',
+      'Hello.contextTypes = {',
       '  "aria-controls": PropTypes.string',
       '};'
     ].join('\n'),
     options: [{
-      ignoreCase: true
+      ignoreCase: true,
+      sortContextTypes: true
     }]
   }, {
     // Invalid code, should not be validated
     code: [
       'class Component extends React.Component {',
-      '  propTypes: {',
+      '  contextTypes: {',
       '    a: PropTypes.any,',
       '    c: PropTypes.any,',
       '    b: PropTypes.any',
@@ -173,6 +171,9 @@ ruleTester.run('sort-prop-types', rule, {
       '  }',
       '}'
     ].join('\n'),
+    options: [{
+      sortContextTypes: true
+    }],
     parser: parsers.BABEL_ESLINT
   }, {
     code: [
@@ -183,11 +184,14 @@ ruleTester.run('sort-prop-types', rule, {
       '    return <div />;',
       '  }',
       '});'
-    ].join('\n')
+    ].join('\n'),
+    options: [{
+      sortContextTypes: true
+    }]
   }, {
     code: [
       'var First = createReactClass({',
-      '  propTypes: {',
+      '  contextTypes: {',
       '    barRequired: PropTypes.func.isRequired,',
       '    onBar: PropTypes.func,',
       '    z: PropTypes.any',
@@ -196,58 +200,9 @@ ruleTester.run('sort-prop-types', rule, {
       '    return <div />;',
       '  }',
       '});'
-    ].join('\n')
-  }, {
-    code: [
-      'var First = createReactClass({',
-      '  propTypes: {',
-      '    a: PropTypes.any,',
-      '    z: PropTypes.string,',
-      '    onBar: PropTypes.func,',
-      '    onFoo: PropTypes.func',
-      '  },',
-      '  render: function() {',
-      '    return <div />;',
-      '  }',
-      '});'
     ].join('\n'),
     options: [{
-      callbacksLast: true
-    }]
-  }, {
-    code: [
-      'class Component extends React.Component {',
-      '  static propTypes = {',
-      '    a: PropTypes.any,',
-      '    z: PropTypes.string,',
-      '    onBar: PropTypes.func,',
-      '    onFoo: PropTypes.func',
-      '  };',
-      '  render() {',
-      '    return <div />;',
-      '  }',
-      '}'
-    ].join('\n'),
-    options: [{
-      callbacksLast: true
-    }],
-    parser: parsers.BABEL_ESLINT
-  }, {
-    code: [
-      'class First extends React.Component {',
-      '  render() {',
-      '    return <div />;',
-      '  }',
-      '}',
-      'First.propTypes = {',
-      '    a: PropTypes.any,',
-      '    z: PropTypes.string,',
-      '    onBar: PropTypes.func,',
-      '    onFoo: PropTypes.func',
-      '};'
-    ].join('\n'),
-    options: [{
-      callbacksLast: true
+      sortContextTypes: true
     }]
   }, {
     code: [
@@ -256,13 +211,14 @@ ruleTester.run('sort-prop-types', rule, {
       '    return <div />;',
       '  }',
       '}',
-      'First.propTypes = {',
+      'First.contextTypes = {',
       '    barRequired: PropTypes.string.isRequired,',
       '    a: PropTypes.any',
       '};'
     ].join('\n'),
     options: [{
-      requiredFirst: true
+      requiredFirst: true,
+      sortContextTypes: true
     }]
   }, {
     code: [
@@ -271,12 +227,13 @@ ruleTester.run('sort-prop-types', rule, {
       '    return <div />;',
       '  }',
       '}',
-      'First.propTypes = {',
+      'First.contextTypes = {',
       '    fooRequired: MyPropType,',
       '};'
     ].join('\n'),
     options: [{
-      requiredFirst: true
+      requiredFirst: true,
+      sortContextTypes: true
     }]
   }, {
     code: [
@@ -285,47 +242,57 @@ ruleTester.run('sort-prop-types', rule, {
       '    return <div />;',
       '  }',
       '}',
-      'First.propTypes = {',
+      'First.contextTypes = {',
       '    barRequired: PropTypes.string.isRequired,',
       '    fooRequired: PropTypes.any.isRequired,',
       '    a: PropTypes.any,',
-      '    z: PropTypes.string,',
       '    onBar: PropTypes.func,',
-      '    onFoo: PropTypes.func',
+      '    onFoo: PropTypes.func,',
+      '    z: PropTypes.string',
       '};'
     ].join('\n'),
     options: [{
       requiredFirst: true,
-      callbacksLast: true
+      callbacksLast: true,
+      sortContextTypes: true
     }]
   }, {
     code: [
       'export default class ClassWithSpreadInPropTypes extends BaseClass {',
-      '  static propTypes = {',
+      '  static contextTypes = {',
       '    b: PropTypes.string,',
-      '    ...c.propTypes,',
+      '    ...c.contextTypes,',
       '    a: PropTypes.string',
       '  }',
       '}'
     ].join('\n'),
+    options: [{
+      sortContextTypes: true
+    }],
     parser: parsers.BABEL_ESLINT
   }, {
     code: [
-      'const propTypes = require(\'./externalPropTypes\')',
+      'const contextTypes = require(\'./externalContextTypes\')',
       'const TextFieldLabel = (props) => {',
       '  return <div />;',
       '};',
-      'TextFieldLabel.propTypes = propTypes;'
-    ].join('\n')
+      'TextFieldLabel.contextTypes = contextTypes;'
+    ].join('\n'),
+    options: [{
+      sortContextTypes: true
+    }]
   }, {
     code: [
       'const First = (props) => <div />;',
-      'export const propTypes = {',
+      'export const contextTypes = {',
       '    a: PropTypes.any,',
       '    z: PropTypes.string,',
       '};',
-      'First.propTypes = propTypes;'
-    ].join('\n')
+      'First.contextTypes = contextTypes;'
+    ].join('\n'),
+    options: [{
+      sortContextTypes: true
+    }]
   }, {
     code: `
       class Component extends React.Component {
@@ -333,7 +300,7 @@ ruleTester.run('sort-prop-types', rule, {
           return <div />;
         }
       }
-      Component.propTypes = {
+      Component.contextTypes = {
         x: PropTypes.any,
         y: PropTypes.any,
         z: PropTypes.shape({
@@ -343,7 +310,10 @@ ruleTester.run('sort-prop-types', rule, {
           b: PropTypes.bool,
         }),
       };
-    `
+    `,
+    options: [{
+      sortContextTypes: true
+    }]
   }, {
     code: `
       class Component extends React.Component {
@@ -351,7 +321,7 @@ ruleTester.run('sort-prop-types', rule, {
           return <div />;
         }
       }
-      Component.propTypes = {
+      Component.contextTypes = {
         a: PropTypes.any,
         b: PropTypes.any,
         c: PropTypes.shape({
@@ -363,7 +333,8 @@ ruleTester.run('sort-prop-types', rule, {
       };
     `,
     options: [{
-      sortShapeProp: true
+      sortShapeProp: true,
+      sortContextTypes: true
     }]
   }, {
     code: `
@@ -372,7 +343,7 @@ ruleTester.run('sort-prop-types', rule, {
           return <div />;
         }
       }
-      Component.propTypes = {
+      Component.contextTypes = {
         a: PropTypes.any,
         b: PropTypes.any,
         c: PropTypes.shape(
@@ -381,7 +352,8 @@ ruleTester.run('sort-prop-types', rule, {
       };
     `,
     options: [{
-      sortShapeProp: true
+      sortShapeProp: true,
+      sortContextTypes: true
     }]
   }, {
     code: `
@@ -390,13 +362,14 @@ ruleTester.run('sort-prop-types', rule, {
           return <div />;
         }
       }
-      Component.propTypes = {
+      Component.contextTypes = {
         a: PropTypes.any,
         z: PropTypes.any,
       };
     `,
     options: [{
-      noSortAlphabetically: true
+      noSortAlphabetically: true,
+      sortContextTypes: true
     }]
   }, {
     code: `
@@ -405,13 +378,14 @@ ruleTester.run('sort-prop-types', rule, {
           return <div />;
         }
       }
-      Component.propTypes = {
+      Component.contextTypes = {
         z: PropTypes.any,
         a: PropTypes.any,
       };
     `,
     options: [{
-      noSortAlphabetically: true
+      noSortAlphabetically: true,
+      sortContextTypes: true
     }]
   }, {
     code: `
@@ -420,13 +394,14 @@ ruleTester.run('sort-prop-types', rule, {
           return <div />;
         }
       }
-      Component.propTypes = {
+      Component.contextTypes = {
         0: PropTypes.any,
         1: PropTypes.any,
       };
     `,
     options: [{
-      ignoreCase: true
+      ignoreCase: true,
+      sortContextTypes: true
     }]
   }, {
     code: `
@@ -445,7 +420,8 @@ ruleTester.run('sort-prop-types', rule, {
       }
     `,
     options: [{
-      sortShapeProp: true
+      sortShapeProp: true,
+      sortContextTypes: true
     }],
     parser: parsers.BABEL_ESLINT
   }, {
@@ -460,19 +436,20 @@ ruleTester.run('sort-prop-types', rule, {
           return <div />;
         }
       }
-      Component.propTypes = {
+      Component.contextTypes = {
         x: PropTypes.shape(shape)
       };
     `,
     options: [{
-      sortShapeProp: true
+      sortShapeProp: true,
+      sortContextTypes: true
     }]
   }],
 
   invalid: [{
     code: [
       'var First = createReactClass({',
-      '  propTypes: {',
+      '  contextTypes: {',
       '    z: PropTypes.string,',
       '    a: PropTypes.any',
       '  },',
@@ -481,6 +458,9 @@ ruleTester.run('sort-prop-types', rule, {
       '  }',
       '});'
     ].join('\n'),
+    options: [{
+      sortContextTypes: true
+    }],
     errors: [{
       message: ERROR_MESSAGE,
       line: 4,
@@ -489,7 +469,7 @@ ruleTester.run('sort-prop-types', rule, {
     }],
     output: [
       'var First = createReactClass({',
-      '  propTypes: {',
+      '  contextTypes: {',
       '    a: PropTypes.any,',
       '    z: PropTypes.string',
       '  },',
@@ -501,7 +481,7 @@ ruleTester.run('sort-prop-types', rule, {
   }, {
     code: [
       'var First = createReactClass({',
-      '  propTypes: {',
+      '  contextTypes: {',
       '    z: PropTypes.any,',
       '    Z: PropTypes.any',
       '  },',
@@ -510,6 +490,9 @@ ruleTester.run('sort-prop-types', rule, {
       '  }',
       '});'
     ].join('\n'),
+    options: [{
+      sortContextTypes: true
+    }],
     errors: [{
       message: ERROR_MESSAGE,
       line: 4,
@@ -518,7 +501,7 @@ ruleTester.run('sort-prop-types', rule, {
     }],
     output: [
       'var First = createReactClass({',
-      '  propTypes: {',
+      '  contextTypes: {',
       '    Z: PropTypes.any,',
       '    z: PropTypes.any',
       '  },',
@@ -530,7 +513,7 @@ ruleTester.run('sort-prop-types', rule, {
   }, {
     code: [
       'var First = createReactClass({',
-      '  propTypes: {',
+      '  contextTypes: {',
       '    Z: PropTypes.any,',
       '    a: PropTypes.any',
       '  },',
@@ -540,7 +523,8 @@ ruleTester.run('sort-prop-types', rule, {
       '});'
     ].join('\n'),
     options: [{
-      ignoreCase: true
+      ignoreCase: true,
+      sortContextTypes: true
     }],
     errors: [{
       message: ERROR_MESSAGE,
@@ -550,7 +534,7 @@ ruleTester.run('sort-prop-types', rule, {
     }],
     output: [
       'var First = createReactClass({',
-      '  propTypes: {',
+      '  contextTypes: {',
       '    a: PropTypes.any,',
       '    Z: PropTypes.any',
       '  },',
@@ -562,7 +546,7 @@ ruleTester.run('sort-prop-types', rule, {
   }, {
     code: [
       'var First = createReactClass({',
-      '  propTypes: {',
+      '  contextTypes: {',
       '    a: PropTypes.any,',
       '    A: PropTypes.any,',
       '    z: PropTypes.string,',
@@ -573,10 +557,13 @@ ruleTester.run('sort-prop-types', rule, {
       '  }',
       '});'
     ].join('\n'),
+    options: [{
+      sortContextTypes: true
+    }],
     errors: 2,
     output: [
       'var First = createReactClass({',
-      '  propTypes: {',
+      '  contextTypes: {',
       '    A: PropTypes.any,',
       '    Z: PropTypes.string,',
       '    a: PropTypes.any,',
@@ -590,7 +577,7 @@ ruleTester.run('sort-prop-types', rule, {
   }, {
     code: [
       'var First = createReactClass({',
-      '  propTypes: {',
+      '  contextTypes: {',
       '    a: PropTypes.any,',
       '    Zz: PropTypes.string',
       '  },',
@@ -599,7 +586,7 @@ ruleTester.run('sort-prop-types', rule, {
       '  }',
       '});',
       'var Second = createReactClass({',
-      '  propTypes: {',
+      '  contextTypes: {',
       '    aAA: PropTypes.any,',
       '    ZZ: PropTypes.string',
       '  },',
@@ -608,10 +595,13 @@ ruleTester.run('sort-prop-types', rule, {
       '  }',
       '});'
     ].join('\n'),
+    options: [{
+      sortContextTypes: true
+    }],
     errors: 2,
     output: [
       'var First = createReactClass({',
-      '  propTypes: {',
+      '  contextTypes: {',
       '    Zz: PropTypes.string,',
       '    a: PropTypes.any',
       '  },',
@@ -620,7 +610,7 @@ ruleTester.run('sort-prop-types', rule, {
       '  }',
       '});',
       'var Second = createReactClass({',
-      '  propTypes: {',
+      '  contextTypes: {',
       '    ZZ: PropTypes.string,',
       '    aAA: PropTypes.any',
       '  },',
@@ -636,7 +626,7 @@ ruleTester.run('sort-prop-types', rule, {
       '    return <div />;',
       '  }',
       '}',
-      'First.propTypes = {',
+      'First.contextTypes = {',
       '    yy: PropTypes.any,',
       '    bb: PropTypes.string',
       '};',
@@ -645,11 +635,14 @@ ruleTester.run('sort-prop-types', rule, {
       '    return <div />;',
       '  }',
       '}',
-      'Second.propTypes = {',
+      'Second.contextTypes = {',
       '    aAA: PropTypes.any,',
       '    ZZ: PropTypes.string',
       '};'
     ].join('\n'),
+    options: [{
+      sortContextTypes: true
+    }],
     errors: 2,
     output: [
       'class First extends React.Component {',
@@ -657,7 +650,7 @@ ruleTester.run('sort-prop-types', rule, {
       '    return <div />;',
       '  }',
       '}',
-      'First.propTypes = {',
+      'First.contextTypes = {',
       '    bb: PropTypes.string,',
       '    yy: PropTypes.any',
       '};',
@@ -666,7 +659,7 @@ ruleTester.run('sort-prop-types', rule, {
       '    return <div />;',
       '  }',
       '}',
-      'Second.propTypes = {',
+      'Second.contextTypes = {',
       '    ZZ: PropTypes.string,',
       '    aAA: PropTypes.any',
       '};'
@@ -674,7 +667,7 @@ ruleTester.run('sort-prop-types', rule, {
   }, {
     code: [
       'class Component extends React.Component {',
-      '  static propTypes = {',
+      '  static contextTypes = {',
       '    z: PropTypes.any,',
       '    y: PropTypes.any,',
       '    a: PropTypes.any',
@@ -684,11 +677,14 @@ ruleTester.run('sort-prop-types', rule, {
       '  }',
       '}'
     ].join('\n'),
+    options: [{
+      sortContextTypes: true
+    }],
     parser: parsers.BABEL_ESLINT,
     errors: 2,
     output: [
       'class Component extends React.Component {',
-      '  static propTypes = {',
+      '  static contextTypes = {',
       '    a: PropTypes.any,',
       '    y: PropTypes.any,',
       '    z: PropTypes.any',
@@ -701,7 +697,7 @@ ruleTester.run('sort-prop-types', rule, {
   }, {
     code: [
       'class Component extends React.Component {',
-      '  static propTypes = forbidExtraProps({',
+      '  static contextTypes = forbidExtraProps({',
       '    z: PropTypes.any,',
       '    y: PropTypes.any,',
       '    a: PropTypes.any',
@@ -711,6 +707,9 @@ ruleTester.run('sort-prop-types', rule, {
       '  }',
       '}'
     ].join('\n'),
+    options: [{
+      sortContextTypes: true
+    }],
     parser: parsers.BABEL_ESLINT,
     settings: {
       propWrapperFunctions: ['forbidExtraProps']
@@ -718,7 +717,7 @@ ruleTester.run('sort-prop-types', rule, {
     errors: 2,
     output: [
       'class Component extends React.Component {',
-      '  static propTypes = forbidExtraProps({',
+      '  static contextTypes = forbidExtraProps({',
       '    a: PropTypes.any,',
       '    y: PropTypes.any,',
       '    z: PropTypes.any',
@@ -730,313 +729,16 @@ ruleTester.run('sort-prop-types', rule, {
     ].join('\n')
   }, {
     code: [
-      'var First = createReactClass({',
-      '  propTypes: {',
-      '    a: PropTypes.any,',
-      '    z: PropTypes.string,',
-      '    onFoo: PropTypes.func,',
-      '    onBar: PropTypes.func',
-      '  },',
-      '  render: function() {',
-      '    return <div />;',
-      '  }',
-      '});'
-    ].join('\n'),
-    options: [{
-      callbacksLast: true
-    }],
-    errors: [{
-      message: ERROR_MESSAGE,
-      line: 6,
-      column: 5,
-      type: 'Property'
-    }],
-    output: [
-      'var First = createReactClass({',
-      '  propTypes: {',
-      '    a: PropTypes.any,',
-      '    z: PropTypes.string,',
-      '    onBar: PropTypes.func,',
-      '    onFoo: PropTypes.func',
-      '  },',
-      '  render: function() {',
-      '    return <div />;',
-      '  }',
-      '});'
-    ].join('\n')
-  }, {
-    code: [
-      'class Component extends React.Component {',
-      '  static propTypes = {',
-      '    a: PropTypes.any,',
-      '    z: PropTypes.string,',
-      '    onFoo: PropTypes.func,',
-      '    onBar: PropTypes.func',
-      '  };',
-      '  render() {',
-      '    return <div />;',
-      '  }',
-      '}'
-    ].join('\n'),
-    options: [{
-      callbacksLast: true
-    }],
-    parser: parsers.BABEL_ESLINT,
-    errors: [{
-      message: ERROR_MESSAGE,
-      line: 6,
-      column: 5,
-      type: 'Property'
-    }],
-    output: [
-      'class Component extends React.Component {',
-      '  static propTypes = {',
-      '    a: PropTypes.any,',
-      '    z: PropTypes.string,',
-      '    onBar: PropTypes.func,',
-      '    onFoo: PropTypes.func',
-      '  };',
-      '  render() {',
-      '    return <div />;',
-      '  }',
-      '}'
-    ].join('\n')
-  }, {
-    code: [
-      'class First extends React.Component {',
-      '  render() {',
-      '    return <div />;',
-      '  }',
-      '}',
-      'First.propTypes = {',
-      '    a: PropTypes.any,',
-      '    z: PropTypes.string,',
-      '    onFoo: PropTypes.func,',
-      '    onBar: PropTypes.func',
-      '};'
-    ].join('\n'),
-    options: [{
-      callbacksLast: true
-    }],
-    errors: [{
-      message: ERROR_MESSAGE,
-      line: 10,
-      column: 5,
-      type: 'Property'
-    }],
-    output: [
-      'class First extends React.Component {',
-      '  render() {',
-      '    return <div />;',
-      '  }',
-      '}',
-      'First.propTypes = {',
-      '    a: PropTypes.any,',
-      '    z: PropTypes.string,',
-      '    onBar: PropTypes.func,',
-      '    onFoo: PropTypes.func',
-      '};'
-    ].join('\n')
-  }, {
-    code: [
-      'class First extends React.Component {',
-      '  render() {',
-      '    return <div />;',
-      '  }',
-      '}',
-      'First.propTypes = forbidExtraProps({',
-      '    a: PropTypes.any,',
-      '    z: PropTypes.string,',
-      '    onFoo: PropTypes.func,',
-      '    onBar: PropTypes.func',
-      '});'
-    ].join('\n'),
-    options: [{
-      callbacksLast: true
-    }],
-    settings: {
-      propWrapperFunctions: ['forbidExtraProps']
-    },
-    errors: [{
-      message: ERROR_MESSAGE,
-      line: 10,
-      column: 5,
-      type: 'Property'
-    }],
-    output: [
-      'class First extends React.Component {',
-      '  render() {',
-      '    return <div />;',
-      '  }',
-      '}',
-      'First.propTypes = forbidExtraProps({',
-      '    a: PropTypes.any,',
-      '    z: PropTypes.string,',
-      '    onBar: PropTypes.func,',
-      '    onFoo: PropTypes.func',
-      '});'
-    ].join('\n')
-  }, {
-    code: [
-      'var First = createReactClass({',
-      '  propTypes: {',
-      '    z: PropTypes.string,',
-      '    a: PropTypes.any,',
-      '    onFoo: PropTypes.func,',
-      '    onBar: PropTypes.func',
-      '  },',
-      '  render: function() {',
-      '    return <div />;',
-      '  }',
-      '});'
-    ].join('\n'),
-    options: [{
-      callbacksLast: true,
-      noSortNonCallbackAlphabetically: true
-    }],
-    errors: [{
-      message: ERROR_MESSAGE,
-      line: 6,
-      column: 5,
-      type: 'Property'
-    }],
-    output: [
-      'var First = createReactClass({',
-      '  propTypes: {',
-      '    z: PropTypes.string,',
-      '    a: PropTypes.any,',
-      '    onBar: PropTypes.func,',
-      '    onFoo: PropTypes.func',
-      '  },',
-      '  render: function() {',
-      '    return <div />;',
-      '  }',
-      '});'
-    ].join('\n')
-  }, {
-    code: [
-      'class Component extends React.Component {',
-      '  static propTypes = {',
-      '    z: PropTypes.string,',
-      '    a: PropTypes.any,',
-      '    onFoo: PropTypes.func,',
-      '    onBar: PropTypes.func',
-      '  };',
-      '  render() {',
-      '    return <div />;',
-      '  }',
-      '}'
-    ].join('\n'),
-    options: [{
-      callbacksLast: true,
-      noSortNonCallbackAlphabetically: true
-    }],
-    parser: parsers.BABEL_ESLINT,
-    errors: [{
-      message: ERROR_MESSAGE,
-      line: 6,
-      column: 5,
-      type: 'Property'
-    }],
-    output: [
-      'class Component extends React.Component {',
-      '  static propTypes = {',
-      '    z: PropTypes.string,',
-      '    a: PropTypes.any,',
-      '    onBar: PropTypes.func,',
-      '    onFoo: PropTypes.func',
-      '  };',
-      '  render() {',
-      '    return <div />;',
-      '  }',
-      '}'
-    ].join('\n')
-  }, {
-    code: [
-      'class First extends React.Component {',
-      '  render() {',
-      '    return <div />;',
-      '  }',
-      '}',
-      'First.propTypes = {',
-      '    z: PropTypes.string,',
-      '    a: PropTypes.any,',
-      '    onFoo: PropTypes.func,',
-      '    onBar: PropTypes.func',
-      '};'
-    ].join('\n'),
-    options: [{
-      callbacksLast: true,
-      noSortNonCallbackAlphabetically: true
-    }],
-    errors: [{
-      message: ERROR_MESSAGE,
-      line: 10,
-      column: 5,
-      type: 'Property'
-    }],
-    output: [
-      'class First extends React.Component {',
-      '  render() {',
-      '    return <div />;',
-      '  }',
-      '}',
-      'First.propTypes = {',
-      '    z: PropTypes.string,',
-      '    a: PropTypes.any,',
-      '    onBar: PropTypes.func,',
-      '    onFoo: PropTypes.func',
-      '};'
-    ].join('\n')
-  }, {
-    code: [
-      'class First extends React.Component {',
-      '  render() {',
-      '    return <div />;',
-      '  }',
-      '}',
-      'First.propTypes = forbidExtraProps({',
-      '    z: PropTypes.string,',
-      '    a: PropTypes.any,',
-      '    onFoo: PropTypes.func,',
-      '    onBar: PropTypes.func',
-      '});'
-    ].join('\n'),
-    options: [{
-      callbacksLast: true,
-      noSortNonCallbackAlphabetically: true
-    }],
-    settings: {
-      propWrapperFunctions: ['forbidExtraProps']
-    },
-    errors: [{
-      message: ERROR_MESSAGE,
-      line: 10,
-      column: 5,
-      type: 'Property'
-    }],
-    output: [
-      'class First extends React.Component {',
-      '  render() {',
-      '    return <div />;',
-      '  }',
-      '}',
-      'First.propTypes = forbidExtraProps({',
-      '    z: PropTypes.string,',
-      '    a: PropTypes.any,',
-      '    onBar: PropTypes.func,',
-      '    onFoo: PropTypes.func',
-      '});'
-    ].join('\n')
-  }, {
-    code: [
       'const First = (props) => <div />;',
-      'const propTypes = {',
+      'const contextTypes = {',
       '    z: PropTypes.string,',
       '    a: PropTypes.any,',
       '};',
-      'First.propTypes = forbidExtraProps(propTypes);'
+      'First.contextTypes = forbidExtraProps(contextTypes);'
     ].join('\n'),
+    options: [{
+      sortContextTypes: true
+    }],
     settings: {
       propWrapperFunctions: ['forbidExtraProps']
     },
@@ -1048,21 +750,24 @@ ruleTester.run('sort-prop-types', rule, {
     }],
     output: [
       'const First = (props) => <div />;',
-      'const propTypes = {',
+      'const contextTypes = {',
       '    a: PropTypes.any,',
       '    z: PropTypes.string,',
       '};',
-      'First.propTypes = forbidExtraProps(propTypes);'
+      'First.contextTypes = forbidExtraProps(contextTypes);'
     ].join('\n')
   }, {
     code: [
       'const First = (props) => <div />;',
-      'const propTypes = {',
+      'const contextTypes = {',
       '    z: PropTypes.string,',
       '    a: PropTypes.any,',
       '};',
-      'First.propTypes = propTypes;'
+      'First.contextTypes = contextTypes;'
     ].join('\n'),
+    options: [{
+      sortContextTypes: true
+    }],
     settings: {
       propWrapperFunctions: ['forbidExtraProps']
     },
@@ -1074,52 +779,16 @@ ruleTester.run('sort-prop-types', rule, {
     }],
     output: [
       'const First = (props) => <div />;',
-      'const propTypes = {',
+      'const contextTypes = {',
       '    a: PropTypes.any,',
       '    z: PropTypes.string,',
       '};',
-      'First.propTypes = propTypes;'
+      'First.contextTypes = contextTypes;'
     ].join('\n')
   }, {
     code: [
       'var First = createReactClass({',
-      '  propTypes: {',
-      '    a: PropTypes.any,',
-      '    onBar: PropTypes.func,',
-      '    onFoo: PropTypes.func,',
-      '    z: PropTypes.string',
-      '  },',
-      '  render: function() {',
-      '    return <div />;',
-      '  }',
-      '});'
-    ].join('\n'),
-    options: [{
-      callbacksLast: true
-    }],
-    errors: [{
-      message: CALLBACK_ERROR_MESSAGE,
-      line: 5,
-      column: 5,
-      type: 'Property'
-    }],
-    output: [
-      'var First = createReactClass({',
-      '  propTypes: {',
-      '    a: PropTypes.any,',
-      '    z: PropTypes.string,',
-      '    onBar: PropTypes.func,',
-      '    onFoo: PropTypes.func',
-      '  },',
-      '  render: function() {',
-      '    return <div />;',
-      '  }',
-      '});'
-    ].join('\n')
-  }, {
-    code: [
-      'var First = createReactClass({',
-      '  propTypes: {',
+      '  contextTypes: {',
       '    fooRequired: PropTypes.string.isRequired,',
       '    barRequired: PropTypes.string.isRequired,',
       '    a: PropTypes.any',
@@ -1130,7 +799,8 @@ ruleTester.run('sort-prop-types', rule, {
       '});'
     ].join('\n'),
     options: [{
-      requiredFirst: true
+      requiredFirst: true,
+      sortContextTypes: true
     }],
     errors: [{
       message: ERROR_MESSAGE,
@@ -1140,7 +810,7 @@ ruleTester.run('sort-prop-types', rule, {
     }],
     output: [
       'var First = createReactClass({',
-      '  propTypes: {',
+      '  contextTypes: {',
       '    barRequired: PropTypes.string.isRequired,',
       '    fooRequired: PropTypes.string.isRequired,',
       '    a: PropTypes.any',
@@ -1153,7 +823,7 @@ ruleTester.run('sort-prop-types', rule, {
   }, {
     code: [
       'var First = createReactClass({',
-      '  propTypes: {',
+      '  contextTypes: {',
       '    a: PropTypes.any,',
       '    barRequired: PropTypes.string.isRequired,',
       '    onFoo: PropTypes.func',
@@ -1164,7 +834,8 @@ ruleTester.run('sort-prop-types', rule, {
       '});'
     ].join('\n'),
     options: [{
-      requiredFirst: true
+      requiredFirst: true,
+      sortContextTypes: true
     }],
     errors: [{
       message: REQUIRED_ERROR_MESSAGE,
@@ -1174,7 +845,7 @@ ruleTester.run('sort-prop-types', rule, {
     }],
     output: [
       'var First = createReactClass({',
-      '  propTypes: {',
+      '  contextTypes: {',
       '    barRequired: PropTypes.string.isRequired,',
       '    a: PropTypes.any,',
       '    onFoo: PropTypes.func',
@@ -1187,7 +858,7 @@ ruleTester.run('sort-prop-types', rule, {
   }, {
     code: [
       'export default class ClassWithSpreadInPropTypes extends BaseClass {',
-      '  static propTypes = {',
+      '  static contextTypes = {',
       '    b: PropTypes.string,',
       '    ...a.propTypes,',
       '    d: PropTypes.string,',
@@ -1195,6 +866,9 @@ ruleTester.run('sort-prop-types', rule, {
       '  }',
       '}'
     ].join('\n'),
+    options: [{
+      sortContextTypes: true
+    }],
     parser: parsers.BABEL_ESLINT,
     errors: [{
       message: ERROR_MESSAGE,
@@ -1204,7 +878,7 @@ ruleTester.run('sort-prop-types', rule, {
     }],
     output: [
       'export default class ClassWithSpreadInPropTypes extends BaseClass {',
-      '  static propTypes = {',
+      '  static contextTypes = {',
       '    b: PropTypes.string,',
       '    ...a.propTypes,',
       '    c: PropTypes.string,',
@@ -1215,7 +889,7 @@ ruleTester.run('sort-prop-types', rule, {
   }, {
     code: [
       'export default class ClassWithSpreadInPropTypes extends BaseClass {',
-      '  static propTypes = {',
+      '  static contextTypes = {',
       '    b: PropTypes.string,',
       '    ...a.propTypes,',
       '    f: PropTypes.string,',
@@ -1225,6 +899,9 @@ ruleTester.run('sort-prop-types', rule, {
       '  }',
       '}'
     ].join('\n'),
+    options: [{
+      sortContextTypes: true
+    }],
     parser: parsers.BABEL_ESLINT,
     errors: [{
       message: ERROR_MESSAGE,
@@ -1234,7 +911,7 @@ ruleTester.run('sort-prop-types', rule, {
     }],
     output: [
       'export default class ClassWithSpreadInPropTypes extends BaseClass {',
-      '  static propTypes = {',
+      '  static contextTypes = {',
       '    b: PropTypes.string,',
       '    ...a.propTypes,',
       '    d: PropTypes.string,',
@@ -1246,15 +923,18 @@ ruleTester.run('sort-prop-types', rule, {
     ].join('\n')
   }, {
     code: [
-      'const propTypes = {',
+      'const contextTypes = {',
       '  b: PropTypes.string,',
       '  a: PropTypes.string,',
       '};',
       'const TextFieldLabel = (props) => {',
       '  return <div />;',
       '};',
-      'TextFieldLabel.propTypes = propTypes;'
+      'TextFieldLabel.contextTypes = contextTypes;'
     ].join('\n'),
+    options: [{
+      sortContextTypes: true
+    }],
     errors: [{
       message: ERROR_MESSAGE,
       line: 3,
@@ -1262,14 +942,14 @@ ruleTester.run('sort-prop-types', rule, {
       type: 'Property'
     }],
     output: [
-      'const propTypes = {',
+      'const contextTypes = {',
       '  a: PropTypes.string,',
       '  b: PropTypes.string,',
       '};',
       'const TextFieldLabel = (props) => {',
       '  return <div />;',
       '};',
-      'TextFieldLabel.propTypes = propTypes;'
+      'TextFieldLabel.contextTypes = contextTypes;'
     ].join('\n')
   }, {
     code: `
@@ -1278,7 +958,7 @@ ruleTester.run('sort-prop-types', rule, {
           return <div />;
         }
       }
-      Component.propTypes = {
+      Component.contextTypes = {
         x: PropTypes.any,
         y: PropTypes.any,
         z: PropTypes.shape({
@@ -1289,7 +969,8 @@ ruleTester.run('sort-prop-types', rule, {
       };
     `,
     options: [{
-      sortShapeProp: true
+      sortShapeProp: true,
+      sortContextTypes: true
     }],
     errors: [{
       message: ERROR_MESSAGE,
@@ -1308,7 +989,7 @@ ruleTester.run('sort-prop-types', rule, {
           return <div />;
         }
       }
-      Component.propTypes = {
+      Component.contextTypes = {
         x: PropTypes.any,
         y: PropTypes.any,
         z: PropTypes.shape({
@@ -1325,14 +1006,15 @@ ruleTester.run('sort-prop-types', rule, {
           return <div />;
         }
       }
-      Component.propTypes = {
+      Component.contextTypes = {
         x: PropTypes.any,
         z: PropTypes.shape(),
         y: PropTypes.any,
       };
     `,
     options: [{
-      sortShapeProp: true
+      sortShapeProp: true,
+      sortContextTypes: true
     }],
     errors: [{
       message: ERROR_MESSAGE,
@@ -1346,7 +1028,7 @@ ruleTester.run('sort-prop-types', rule, {
           return <div />;
         }
       }
-      Component.propTypes = {
+      Component.contextTypes = {
         x: PropTypes.any,
         y: PropTypes.any,
         z: PropTypes.shape(),
@@ -1359,14 +1041,15 @@ ruleTester.run('sort-prop-types', rule, {
           return <div />;
         }
       }
-      Component.propTypes = {
+      Component.contextTypes = {
         x: PropTypes.any,
         z: PropTypes.shape(someType),
         y: PropTypes.any,
       };
     `,
     options: [{
-      sortShapeProp: true
+      sortShapeProp: true,
+      sortContextTypes: true
     }],
     errors: [{
       message: ERROR_MESSAGE,
@@ -1380,7 +1063,7 @@ ruleTester.run('sort-prop-types', rule, {
           return <div />;
         }
       }
-      Component.propTypes = {
+      Component.contextTypes = {
         x: PropTypes.any,
         y: PropTypes.any,
         z: PropTypes.shape(someType),
@@ -1393,7 +1076,7 @@ ruleTester.run('sort-prop-types', rule, {
           return <div />;
         }
       }
-      Component.propTypes = {
+      Component.contextTypes = {
         z: PropTypes.any,
         y: PropTypes.any,
         a: PropTypes.shape({
@@ -1405,7 +1088,8 @@ ruleTester.run('sort-prop-types', rule, {
       };
     `,
     options: [{
-      sortShapeProp: true
+      sortShapeProp: true,
+      sortContextTypes: true
     }],
     errors: [{
       message: ERROR_MESSAGE,
@@ -1439,7 +1123,7 @@ ruleTester.run('sort-prop-types', rule, {
           return <div />;
         }
       }
-      Component.propTypes = {
+      Component.contextTypes = {
         a: PropTypes.shape({
           C: PropTypes.string,
           a: PropTypes.any,
@@ -1457,7 +1141,7 @@ ruleTester.run('sort-prop-types', rule, {
           return <div />;
         }
       }
-      Component.propTypes = {
+      Component.contextTypes = {
         x: PropTypes.any,
         y: PropTypes.any,
         z: PropTypes.shape({
@@ -1470,7 +1154,8 @@ ruleTester.run('sort-prop-types', rule, {
     `,
     options: [{
       sortShapeProp: true,
-      ignoreCase: true
+      ignoreCase: true,
+      sortContextTypes: true
     }],
     errors: [{
       message: ERROR_MESSAGE,
@@ -1489,7 +1174,7 @@ ruleTester.run('sort-prop-types', rule, {
           return <div />;
         }
       }
-      Component.propTypes = {
+      Component.contextTypes = {
         x: PropTypes.any,
         y: PropTypes.any,
         z: PropTypes.shape({
@@ -1507,7 +1192,7 @@ ruleTester.run('sort-prop-types', rule, {
           return <div />;
         }
       }
-      Component.propTypes = {
+      Component.contextTypes = {
         x: PropTypes.any,
         y: PropTypes.any,
         z: PropTypes.shape({
@@ -1520,7 +1205,8 @@ ruleTester.run('sort-prop-types', rule, {
     `,
     options: [{
       sortShapeProp: true,
-      requiredFirst: true
+      requiredFirst: true,
+      sortContextTypes: true
     }],
     errors: [{
       message: REQUIRED_ERROR_MESSAGE,
@@ -1534,7 +1220,7 @@ ruleTester.run('sort-prop-types', rule, {
           return <div />;
         }
       }
-      Component.propTypes = {
+      Component.contextTypes = {
         x: PropTypes.any,
         y: PropTypes.any,
         z: PropTypes.shape({
@@ -1552,59 +1238,7 @@ ruleTester.run('sort-prop-types', rule, {
           return <div />;
         }
       }
-      Component.propTypes = {
-        x: PropTypes.any,
-        y: PropTypes.any,
-        z: PropTypes.shape({
-          a: PropTypes.string,
-          c: PropTypes.number.isRequired,
-          b: PropTypes.any,
-          onFoo: PropTypes.func,
-          d: PropTypes.bool,
-        }),
-      };
-    `,
-    options: [{
-      sortShapeProp: true,
-      callbacksLast: true
-    }],
-    errors: [{
-      message: ERROR_MESSAGE,
-      line: 13,
-      column: 11,
-      type: 'Property'
-    }, {
-      message: CALLBACK_ERROR_MESSAGE,
-      line: 14,
-      column: 11,
-      type: 'Property'
-    }],
-    output: `
-      class Component extends React.Component {
-        render() {
-          return <div />;
-        }
-      }
-      Component.propTypes = {
-        x: PropTypes.any,
-        y: PropTypes.any,
-        z: PropTypes.shape({
-          a: PropTypes.string,
-          b: PropTypes.any,
-          c: PropTypes.number.isRequired,
-          d: PropTypes.bool,
-          onFoo: PropTypes.func,
-        }),
-      };
-    `
-  }, {
-    code: `
-      class Component extends React.Component {
-        render() {
-          return <div />;
-        }
-      }
-      Component.propTypes = {
+      Component.contextTypes = {
         x: PropTypes.any,
         y: PropTypes.any,
         z: PropTypes.shape({
@@ -1618,7 +1252,8 @@ ruleTester.run('sort-prop-types', rule, {
       };
     `,
     options: [{
-      sortShapeProp: true
+      sortShapeProp: true,
+      sortContextTypes: true
     }],
     errors: [{
       message: ERROR_MESSAGE,
@@ -1637,7 +1272,7 @@ ruleTester.run('sort-prop-types', rule, {
           return <div />;
         }
       }
-      Component.propTypes = {
+      Component.contextTypes = {
         x: PropTypes.any,
         y: PropTypes.any,
         z: PropTypes.shape({
@@ -1653,7 +1288,7 @@ ruleTester.run('sort-prop-types', rule, {
   }, {
     code: `
       class Component extends React.Component {
-        static propTypes = {
+        static contextTypes = {
           z: PropTypes.any,
           y: PropTypes.any,
           a: PropTypes.shape({
@@ -1668,7 +1303,8 @@ ruleTester.run('sort-prop-types', rule, {
       }
     `,
     options: [{
-      sortShapeProp: true
+      sortShapeProp: true,
+      sortContextTypes: true
     }],
     parser: parsers.BABEL_ESLINT,
     errors: [{
@@ -1694,7 +1330,7 @@ ruleTester.run('sort-prop-types', rule, {
     }],
     output: `
       class Component extends React.Component {
-        static propTypes = {
+        static contextTypes = {
           a: PropTypes.shape({
             a: PropTypes.any,
             b: PropTypes.bool,
@@ -1711,7 +1347,7 @@ ruleTester.run('sort-prop-types', rule, {
   }, {
     code: [
       'var First = createReactClass({',
-      '  propTypes: {',
+      '  contextTypes: {',
       '    z: PropTypes.string,',
       '    a: PropTypes.any',
       '  },',
@@ -1721,7 +1357,8 @@ ruleTester.run('sort-prop-types', rule, {
       '});'
     ].join('\n'),
     options: [{
-      noSortAlphabetically: false
+      noSortAlphabetically: false,
+      sortContextTypes: true
     }],
     errors: [{
       message: ERROR_MESSAGE,
@@ -1731,7 +1368,7 @@ ruleTester.run('sort-prop-types', rule, {
     }],
     output: [
       'var First = createReactClass({',
-      '  propTypes: {',
+      '  contextTypes: {',
       '    a: PropTypes.any,',
       '    z: PropTypes.string',
       '  },',
@@ -1743,7 +1380,7 @@ ruleTester.run('sort-prop-types', rule, {
   }, {
     code: [
       'var First = createReactClass({',
-      '  propTypes: {',
+      '  contextTypes: {',
       '    \'data-letter\': PropTypes.string,',
       '    a: PropTypes.any,',
       '    e: PropTypes.any',
@@ -1754,7 +1391,8 @@ ruleTester.run('sort-prop-types', rule, {
       '});'
     ].join('\n'),
     options: [{
-      noSortAlphabetically: false
+      noSortAlphabetically: false,
+      sortContextTypes: true
     }],
     errors: [{
       message: ERROR_MESSAGE,
@@ -1764,7 +1402,7 @@ ruleTester.run('sort-prop-types', rule, {
     }],
     output: [
       'var First = createReactClass({',
-      '  propTypes: {',
+      '  contextTypes: {',
       '    a: PropTypes.any,',
       '    \'data-letter\': PropTypes.string,',
       '    e: PropTypes.any',
@@ -1781,13 +1419,14 @@ ruleTester.run('sort-prop-types', rule, {
           return <div />;
         }
       }
-      Component.propTypes = {
+      Component.contextTypes = {
         1: PropTypes.any,
         0: PropTypes.any,
       };
     `,
     options: [{
-      ignoreCase: true
+      ignoreCase: true,
+      sortContextTypes: true
     }],
     errors: [{
       message: ERROR_MESSAGE,
@@ -1801,7 +1440,7 @@ ruleTester.run('sort-prop-types', rule, {
           return <div />;
         }
       }
-      Component.propTypes = {
+      Component.contextTypes = {
         0: PropTypes.any,
         1: PropTypes.any,
       };
@@ -1814,7 +1453,7 @@ ruleTester.run('sort-prop-types', rule, {
         b: PropTypes.bool,
       };
       class Component extends React.Component {
-        static propTypes = {
+        static contextTypes = {
           x: PropTypes.shape(shape),
         };
 
@@ -1824,7 +1463,8 @@ ruleTester.run('sort-prop-types', rule, {
       }
     `,
     options: [{
-      sortShapeProp: true
+      sortShapeProp: true,
+      sortContextTypes: true
     }],
     parser: parsers.BABEL_ESLINT,
     errors: [{
@@ -1845,7 +1485,7 @@ ruleTester.run('sort-prop-types', rule, {
         c: PropTypes.any,
       };
       class Component extends React.Component {
-        static propTypes = {
+        static contextTypes = {
           x: PropTypes.shape(shape),
         };
 
@@ -1866,12 +1506,13 @@ ruleTester.run('sort-prop-types', rule, {
           return <div />;
         }
       }
-      Component.propTypes = {
+      Component.contextTypes = {
         x: PropTypes.shape(shape)
       };
     `,
     options: [{
-      sortShapeProp: true
+      sortShapeProp: true,
+      sortContextTypes: true
     }],
     errors: [{
       message: ERROR_MESSAGE,
@@ -1895,7 +1536,7 @@ ruleTester.run('sort-prop-types', rule, {
           return <div />;
         }
       }
-      Component.propTypes = {
+      Component.contextTypes = {
         x: PropTypes.shape(shape)
       };
     `
